@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "Hq5/EeK5uREwL2fbkhrRJz7JNcH4bqi1wHsiDxp8Ic2FvmhbUiHeWzsqhznhp/DP1D7po2/KlI4QxSppmcr3Yw==",
+  "success": true,
+  "projectFilePath": "D:\\ASP.NET-Core-projects\\CatalogoApi\\CatalogoApi\\CatalogoApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\mprom\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.18\\microsoft.netcore.app.host.win-x64.3.1.18.nupkg.sha512"
+  ],
+  "logs": []
+}
