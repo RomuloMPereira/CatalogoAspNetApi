@@ -25,7 +25,7 @@ namespace CatalogoApi.Controllers
             return _context.Produtos.AsNoTracking().ToList();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name="ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
             var produto = _context.Produtos.AsNoTracking().FirstOrDefault(p => p.ProdutoId == id);
@@ -34,6 +34,17 @@ namespace CatalogoApi.Controllers
                 return NotFound();
             }
             return produto;
+        }
+
+        [HttpPost]
+        public ActionResult Post([FromBody]Produto produto)
+        {
+            //Validação do modelo é feita automaticamente a partir do ASP.NET 2.0 com a anotação ApiController
+            _context.Produtos.Add(produto);
+            _context.SaveChanges();
+
+            //Retorna um header location
+            return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId }, produto);
         }
     }
 }
