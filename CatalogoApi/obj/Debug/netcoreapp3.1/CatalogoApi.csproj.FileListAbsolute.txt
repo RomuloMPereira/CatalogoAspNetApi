@@ -27,3 +27,6 @@ D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\obj\Debug\netcoreapp3.1\Catalog
 D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\obj\Debug\netcoreapp3.1\CatalogoApi.dll
 D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\obj\Debug\netcoreapp3.1\CatalogoApi.pdb
 D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\obj\Debug\netcoreapp3.1\CatalogoApi.genruntimeconfig.cache
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
