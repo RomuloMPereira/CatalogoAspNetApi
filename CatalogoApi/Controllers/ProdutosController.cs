@@ -46,5 +46,32 @@ namespace CatalogoApi.Controllers
             //Retorna um header location
             return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId }, produto);
         }
+
+        [HttpPut("{id}")]
+        public ActionResult Put(int id, [FromBody] Produto produto)
+        {
+            if(id != produto.ProdutoId)
+            {
+                return BadRequest();
+            }
+            //Alterar o estado da entidade para Modified, fazer as alterações e persistir no banco
+            _context.Entry(produto).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<Produto> Delete(int id)
+        {
+            var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
+            if(produto == null)
+            {
+                return NotFound();
+            }
+            _context.Produtos.Remove(produto);
+            _context.SaveChanges();
+            return produto;
+        }
     }
 }
