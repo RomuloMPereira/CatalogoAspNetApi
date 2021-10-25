@@ -25,7 +25,7 @@ namespace CatalogoApi.Controllers
             return _context.Produtos.AsNoTracking().ToList();
         }
 
-        [HttpGet("{id}", Name="ObterProduto")]
+        [HttpGet("{id:int:min(1)}", Name="ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
             var produto = _context.Produtos.AsNoTracking().FirstOrDefault(p => p.ProdutoId == id);
@@ -58,7 +58,7 @@ namespace CatalogoApi.Controllers
             _context.Entry(produto).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return Ok();
+            return Ok(produto);
         }
 
         [HttpDelete("{id}")]
