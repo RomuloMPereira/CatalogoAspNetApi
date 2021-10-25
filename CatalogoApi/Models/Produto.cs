@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CatalogoApi.Validations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,6 +15,7 @@ namespace CatalogoApi.Models
         public int ProdutoId { get; set; }
         [Required(ErrorMessage = "O nome é obrigatório")]
         [StringLength (50, ErrorMessage = "O nome deve ter entre 5 e 50 caracteres", MinimumLength =5)]
+        [PrimeiraLetraMaiuscula]
         public string Nome { get; set; }
         [Required]
         [StringLength(100, ErrorMessage ="A descrição deve ter no máximo {1} caracteres")]
