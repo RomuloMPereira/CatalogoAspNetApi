@@ -1,6 +1,7 @@
 using CatalogoApi.Context;
 using CatalogoApi.Extensions;
 using CatalogoApi.Filters;
+using CatalogoApi.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,13 +40,18 @@ namespace CatalogoApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             //Pipeline de middlewares
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            loggerFactory.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration() 
+            { 
+                LogLevel = LogLevel.Information
+            }));
 
             app.ConfigureExceptionHandler();
 
