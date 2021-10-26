@@ -1,5 +1,6 @@
 ﻿using CatalogoApi.Context;
 using CatalogoApi.Models;
+using CatalogoApi.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,112 +16,71 @@ namespace CatalogoApi.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUnityOfWork _unityOfWork;
         private readonly ILogger _logger;
-        public CategoriasController(AppDbContext context, ILogger<CategoriasController> logger)
+        public CategoriasController(IUnityOfWork unityOfWork, ILogger<CategoriasController> logger)
         {
-            _context = context;
+            _unityOfWork = unityOfWork;
             _logger = logger;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            try
-            {
-                return _context.Categorias.AsNoTracking().ToList();
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao tentar obter as categorias do banco de dados");
-            }
+            return _unityOfWork.CategoriaRepository.Get().ToList();
         }
 
         [HttpGet("{id}", Name = "ObterCategoria")]
         public ActionResult<Categoria> Get(int id)
         {
-            try
+            var categoria = _unityOfWork.CategoriaRepository.GetById(c => c.CategoriaId == id);
+            if (categoria == null)
             {
-                var categoria = _context.Categorias.AsNoTracking().FirstOrDefault(c => c.CategoriaId == id);
-                if (categoria == null)
-                {
-                    return NotFound($"A categoria com id={id} não foi encontrada");
-                }
-                return categoria;
-                }
-            catch (Exception)
-            { 
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao tentar obter as categorias do banco de dados");
+                return NotFound($"A categoria com id={id} não foi encontrada");
             }
-            
+            return categoria;
         }
 
         [HttpGet("produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
-            _logger.LogInformation("###################LOG GET categorias/produtos#######################");
-            return _context.Categorias.Include(x => x.Produtos).ToList();
+            return _unityOfWork.CategoriaRepository.GetCategoriasProdutos().ToList();
         }
 
         [HttpPost]
         public ActionResult Post([FromBody] Categoria categoria)
         {
-            try
-            {
-                _context.Categorias.Add(categoria);
-                _context.SaveChanges();
+            _unityOfWork.CategoriaRepository.Add(categoria);
+            _unityOfWork.Commit();
 
-                //Retorna um header location
-                return new CreatedAtRouteResult("ObterCategoria", new { id = categoria.CategoriaId }, categoria);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao tentar criar uma nova categoria");
-            }
-            
+            //Retorna um header location
+            return new CreatedAtRouteResult("ObterCategoria", new { id = categoria.CategoriaId }, categoria); 
         }
 
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Categoria categoria)
         {
-            try
+            if (id != categoria.CategoriaId)
             {
-                if (id != categoria.CategoriaId)
-                {
-                    return BadRequest($"Não foi possível alterar a categoria com id={id}");
-                }
-                //Alterar o estado da entidade para Modified, fazer as alterações e persistir no banco
-                _context.Entry(categoria).State = EntityState.Modified;
-                _context.SaveChanges();
+                return BadRequest($"Não foi possível alterar a categoria com id={id}");
+            }
+            _unityOfWork.CategoriaRepository.Update(categoria);
+            _unityOfWork.Commit();
 
-                return Ok($"A categoria com id={id} foi alterada com sucesso");
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar alterar a categoria com id={id}");
-            }
-            
+            return Ok($"A categoria com id={id} foi alterada com sucesso");
         }
 
         [HttpDelete("{id}")]
         public ActionResult<Categoria> Delete(int id)
         {
-            try
+            var categoria = _unityOfWork.CategoriaRepository.GetById(c => c.CategoriaId == id);
+            if (categoria == null)
             {
-                var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
-                if (categoria == null)
-                {
-                    return NotFound($"A categoria com id={id} não foi encontrada");
-                }
-                _context.Categorias.Remove(categoria);
-                _context.SaveChanges();
-                return categoria;
+                return NotFound($"A categoria com id={id} não foi encontrada");
             }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar excluir a categoria com id={id}");
-            }
-            
+            _unityOfWork.CategoriaRepository.Delete(categoria);
+            _unityOfWork.Commit();
+            return categoria;
         }
     }
 }

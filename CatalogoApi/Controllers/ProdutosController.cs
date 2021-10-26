@@ -1,12 +1,9 @@
-﻿using CatalogoApi.Context;
-using CatalogoApi.Filters;
+﻿using CatalogoApi.Filters;
 using CatalogoApi.Models;
+using CatalogoApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CatalogoApi.Controllers
 {
@@ -14,24 +11,23 @@ namespace CatalogoApi.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public ProdutosController(AppDbContext context)
+        private readonly IUnityOfWork _unityOfWork;
+        public ProdutosController(IUnityOfWork unityOfWork)
         {
-            _context = context;
+            _unityOfWork = unityOfWork;
         }
 
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
         public ActionResult<IEnumerable<Produto>> Get()
         {
-            return _context.Produtos.AsNoTracking().ToList();
+            return _unityOfWork.ProdutoRepository.Get().ToList();
         }
 
         [HttpGet("{id:int:min(1)}", Name="ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
-            //throw new Exception("Teste para o ExceptionHandler global ser acionado");
-            var produto = _context.Produtos.AsNoTracking().FirstOrDefault(p => p.ProdutoId == id);
+            var produto = _unityOfWork.ProdutoRepository.GetById(p => p.ProdutoId == id);
             if(produto == null)
             {
                 return NotFound();
@@ -39,12 +35,18 @@ namespace CatalogoApi.Controllers
             return produto;
         }
 
+        [HttpGet("menorpreco")]
+        public ActionResult<IEnumerable<Produto>> GetProdutosPrecos()
+        {
+            return _unityOfWork.ProdutoRepository.GetProdutosPorPreco().ToList();
+        }
+
         [HttpPost]
         public ActionResult Post([FromBody]Produto produto)
         {
             //Validação do modelo é feita automaticamente a partir do ASP.NET 2.0 com a anotação ApiController
-            _context.Produtos.Add(produto);
-            _context.SaveChanges();
+            _unityOfWork.ProdutoRepository.Add(produto);
+            _unityOfWork.Commit();
 
             //Retorna um header location
             return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId }, produto);
@@ -58,8 +60,8 @@ namespace CatalogoApi.Controllers
                 return BadRequest();
             }
             //Alterar o estado da entidade para Modified, fazer as alterações e persistir no banco
-            _context.Entry(produto).State = EntityState.Modified;
-            _context.SaveChanges();
+            _unityOfWork.ProdutoRepository.Update(produto);
+            _unityOfWork.Commit();
 
             return Ok(produto);
         }
@@ -67,13 +69,13 @@ namespace CatalogoApi.Controllers
         [HttpDelete("{id}")]
         public ActionResult<Produto> Delete(int id)
         {
-            var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
+            var produto = _unityOfWork.ProdutoRepository.GetById(p => p.ProdutoId == id);
             if(produto == null)
             {
                 return NotFound();
             }
-            _context.Produtos.Remove(produto);
-            _context.SaveChanges();
+            _unityOfWork.ProdutoRepository.Delete(produto);
+            _unityOfWork.Commit();
             return produto;
         }
     }

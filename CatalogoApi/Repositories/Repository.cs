@@ -23,7 +23,7 @@ namespace CatalogoApi.Repositories
 
         public T GetById(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().SingleOrDefault(predicate);
+            return _context.Set<T>().AsNoTracking().SingleOrDefault(predicate);
         }
 
         public void Add(T entity)
