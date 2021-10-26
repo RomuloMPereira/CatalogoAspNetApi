@@ -2,6 +2,7 @@ using CatalogoApi.Context;
 using CatalogoApi.Extensions;
 using CatalogoApi.Filters;
 using CatalogoApi.Logging;
+using CatalogoApi.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +32,7 @@ namespace CatalogoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUnityOfWork, UnityOfWork>();
             services.AddScoped<ApiLoggingFilter>();
             services.AddDbContext<AppDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers()
