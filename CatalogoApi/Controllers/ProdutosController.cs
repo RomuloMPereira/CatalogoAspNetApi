@@ -1,4 +1,5 @@
 ﻿using CatalogoApi.Context;
+using CatalogoApi.Filters;
 using CatalogoApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace CatalogoApi.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(ApiLoggingFilter))]
         public ActionResult<IEnumerable<Produto>> Get()
         {
             return _context.Produtos.AsNoTracking().ToList();
@@ -28,6 +30,7 @@ namespace CatalogoApi.Controllers
         [HttpGet("{id:int:min(1)}", Name="ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
+            //throw new Exception("Teste para o ExceptionHandler global ser acionado");
             var produto = _context.Produtos.AsNoTracking().FirstOrDefault(p => p.ProdutoId == id);
             if(produto == null)
             {
