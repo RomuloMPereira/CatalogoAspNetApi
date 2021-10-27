@@ -2,8 +2,10 @@
 using CatalogoApi.DTOs;
 using CatalogoApi.Filters;
 using CatalogoApi.Models;
+using CatalogoApi.Pagination;
 using CatalogoApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,9 +25,21 @@ namespace CatalogoApi.Controllers
 
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
-        public ActionResult<IEnumerable<ProdutoDTO>> Get()
+        public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery] ProdutosParameters produtosParameters)
         {
-            var produtos = _unityOfWork.ProdutoRepository.Get().ToList();
+            var produtos = _unityOfWork.ProdutoRepository.GetProdutos(produtosParameters);
+
+            var metadata = new
+            {
+                produtos.TotalCount,
+                produtos.PageSize,
+                produtos.CurrentPage,
+                produtos.TotalPages,
+                produtos.HasNext,
+                produtos.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
             var produtosDto = _mapper.Map<List<ProdutoDTO>>(produtos);
             return produtosDto;
         }
