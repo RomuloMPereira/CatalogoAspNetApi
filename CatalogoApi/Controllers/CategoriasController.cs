@@ -1,4 +1,6 @@
-﻿using CatalogoApi.Context;
+﻿using AutoMapper;
+using CatalogoApi.Context;
+using CatalogoApi.DTOs;
 using CatalogoApi.Models;
 using CatalogoApi.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -18,52 +20,62 @@ namespace CatalogoApi.Controllers
     {
         private readonly IUnityOfWork _unityOfWork;
         private readonly ILogger _logger;
-        public CategoriasController(IUnityOfWork unityOfWork, ILogger<CategoriasController> logger)
+        private readonly IMapper _mapper;
+        public CategoriasController(IUnityOfWork unityOfWork, ILogger<CategoriasController> logger, IMapper mapper)
         {
             _unityOfWork = unityOfWork;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Categoria>> Get()
+        public ActionResult<IEnumerable<CategoriaDTO>> Get()
         {
-            return _unityOfWork.CategoriaRepository.Get().ToList();
+            var categorias = _unityOfWork.CategoriaRepository.Get().ToList();
+            var categoriasDto = _mapper.Map<List<CategoriaDTO>>(categorias);
+            return categoriasDto;
         }
 
         [HttpGet("{id}", Name = "ObterCategoria")]
-        public ActionResult<Categoria> Get(int id)
+        public ActionResult<CategoriaDTO> Get(int id)
         {
             var categoria = _unityOfWork.CategoriaRepository.GetById(c => c.CategoriaId == id);
             if (categoria == null)
             {
                 return NotFound($"A categoria com id={id} não foi encontrada");
             }
-            return categoria;
+            var categoriaDto = _mapper.Map<CategoriaDTO>(categoria);
+            return categoriaDto;
         }
 
         [HttpGet("produtos")]
-        public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
+        public ActionResult<IEnumerable<CategoriaDTO>> GetCategoriasProdutos()
         {
-            return _unityOfWork.CategoriaRepository.GetCategoriasProdutos().ToList();
+            var categorias = _unityOfWork.CategoriaRepository.GetCategoriasProdutos().ToList();
+            var categoriasDto = _mapper.Map<List<CategoriaDTO>>(categorias);
+            return categoriasDto;
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] Categoria categoria)
+        public ActionResult Post([FromBody] CategoriaDTO categoriaDto)
         {
+            var categoria = _mapper.Map<Categoria>(categoriaDto);
             _unityOfWork.CategoriaRepository.Add(categoria);
             _unityOfWork.Commit();
+            var categoriaDtoAdded = _mapper.Map<CategoriaDTO>(categoria);
 
             //Retorna um header location
-            return new CreatedAtRouteResult("ObterCategoria", new { id = categoria.CategoriaId }, categoria); 
+            return new CreatedAtRouteResult("ObterCategoria", new { id = categoria.CategoriaId }, categoriaDtoAdded); 
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Categoria categoria)
+        public ActionResult Put(int id, [FromBody] CategoriaDTO categoriaDto)
         {
-            if (id != categoria.CategoriaId)
+            if (id != categoriaDto.CategoriaId)
             {
                 return BadRequest($"Não foi possível alterar a categoria com id={id}");
             }
+            var categoria = _mapper.Map<Categoria>(categoriaDto);
             _unityOfWork.CategoriaRepository.Update(categoria);
             _unityOfWork.Commit();
 
@@ -71,7 +83,7 @@ namespace CatalogoApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Categoria> Delete(int id)
+        public ActionResult<CategoriaDTO> Delete(int id)
         {
             var categoria = _unityOfWork.CategoriaRepository.GetById(c => c.CategoriaId == id);
             if (categoria == null)
@@ -80,7 +92,8 @@ namespace CatalogoApi.Controllers
             }
             _unityOfWork.CategoriaRepository.Delete(categoria);
             _unityOfWork.Commit();
-            return categoria;
+            var categoriaDto = _mapper.Map<CategoriaDTO>(categoria);
+            return categoriaDto;
         }
     }
 }
