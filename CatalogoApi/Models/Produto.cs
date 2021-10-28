@@ -21,6 +21,8 @@ namespace CatalogoApi.Models
         [StringLength(100, ErrorMessage ="A descrição deve ter no máximo {1} caracteres")]
         public string Descricao { get; set; }
         [Required]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(8, 2)")]
         [Range(1, 10000, ErrorMessage ="O preço deve estar entre {1} e {2}")]
         public decimal Preco { get; set; }
         [Required]
