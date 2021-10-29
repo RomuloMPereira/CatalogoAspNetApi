@@ -38,6 +38,8 @@ namespace CatalogoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
@@ -96,6 +98,8 @@ namespace CatalogoApi
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseCors(option => option.WithOrigins("https://www.apirequest.io/").WithMethods("GET"));
 
             app.UseEndpoints(endpoints =>
             {
