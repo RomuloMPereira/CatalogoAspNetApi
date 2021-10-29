@@ -80,3 +80,7 @@ D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\System.
 D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\System.Composition.Runtime.dll
 D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\System.Composition.TypedParts.dll
 D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\obj\Debug\netcoreapp3.1\CatalogoApi.MvcApplicationPartsAssemblyInfo.cs
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll

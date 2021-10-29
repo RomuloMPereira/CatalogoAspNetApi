@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,11 +75,26 @@ namespace CatalogoApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 });
 
-            services.AddApiVersioning(options =>
+            services.AddSwaggerGen(c =>
             {
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ReportApiVersions = true;
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "APICatalogo",
+                    Description = "Catálogo de produtos e categorias",
+                    TermsOfService = new Uri("https://romulopereira.dev"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Romulo",
+                        Email = "romulo@pereira.com",
+                        Url = new Uri("https://romulopereira.dev")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Usar sobre LICX",
+                        Url = new Uri("https://romulopereira.dev")
+                    }
+                });
             });
 
             services.AddControllers()
@@ -112,6 +128,10 @@ namespace CatalogoApi
             app.UseAuthorization();
 
             app.UseCors();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Catálogo"));
 
             app.UseEndpoints(endpoints =>
             {
