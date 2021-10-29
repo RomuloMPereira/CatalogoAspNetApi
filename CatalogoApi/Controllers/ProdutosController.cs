@@ -4,6 +4,7 @@ using CatalogoApi.Filters;
 using CatalogoApi.Models;
 using CatalogoApi.Pagination;
 using CatalogoApi.Repositories;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Linq;
 
 namespace CatalogoApi.Controllers
 {
+    [EnableCors("PermitirApiRequest")]
     [Route("[Controller]")]
     [ApiController]
     public class ProdutosController : ControllerBase

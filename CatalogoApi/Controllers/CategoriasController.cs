@@ -1,19 +1,14 @@
 ﻿using AutoMapper;
-using CatalogoApi.Context;
 using CatalogoApi.DTOs;
 using CatalogoApi.Models;
 using CatalogoApi.Pagination;
 using CatalogoApi.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CatalogoApi.Controllers
 {
