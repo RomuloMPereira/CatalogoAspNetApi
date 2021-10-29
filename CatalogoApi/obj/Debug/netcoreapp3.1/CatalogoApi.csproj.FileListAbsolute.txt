@@ -52,3 +52,10 @@ D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microso
 D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
 D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
+D:\ASP.NET-Core-projects\CatalogoApi\CatalogoApi\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
