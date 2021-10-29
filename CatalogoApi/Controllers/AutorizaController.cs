@@ -14,6 +14,7 @@ using System.Text;
 
 namespace CatalogoApi.Controllers
 {
+    [Produces("application/json")]
     [Route("[controller]")]
     [ApiController]
     public class AutorizaController : ControllerBase

@@ -12,6 +12,8 @@ using System.Linq;
 
 namespace CatalogoApi.Controllers
 {
+    [ApiConventionType(typeof(DefaultApiConventions))]
+    [Produces("application/json")]
     [EnableCors("PermitirApiRequest")]
     [Route("[Controller]")]
     [ApiController]

@@ -4,6 +4,7 @@ using CatalogoApi.Models;
 using CatalogoApi.Pagination;
 using CatalogoApi.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using System.Linq;
 
 namespace CatalogoApi.Controllers
 {
+    [Produces("application/json")]
     [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("[Controller]")]
     [ApiController]
@@ -48,6 +50,8 @@ namespace CatalogoApi.Controllers
         }
 
         [HttpGet("{id}", Name = "ObterCategoria")]
+        [ProducesResponseType(typeof(CategoriaDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<CategoriaDTO> Get(int id)
         {
             var categoria = _unityOfWork.CategoriaRepository.GetById(c => c.CategoriaId == id);
@@ -68,6 +72,8 @@ namespace CatalogoApi.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult Post([FromBody] CategoriaDTO categoriaDto)
         {
             var categoria = _mapper.Map<Categoria>(categoriaDto);
@@ -80,6 +86,7 @@ namespace CatalogoApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public ActionResult Put(int id, [FromBody] CategoriaDTO categoriaDto)
         {
             if (id != categoriaDto.CategoriaId)
